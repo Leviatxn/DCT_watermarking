@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,6 +11,9 @@ MID_BAND = [
     (2,0),(2,1),(2,2),(3,0),(3,1)
 ]  # mid-frequency positions
 
+def ensure_dir(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
 
 def embed_dct_midband(img, watermark):
     h, w = img.shape
@@ -35,6 +39,29 @@ def embed_dct_midband(img, watermark):
 
     return np.clip(watermarked, 0, 255).astype(np.uint8)
 
+# ==== ฟังก์ชันฝังลายน้ำแบบ DCT ====
+def embed_dct(image, watermark, alpha=10):
+    h, w = image.shape
+    wm_h, wm_w = watermark.shape
+    wm_flat = watermark.flatten()
+
+    # คัดลอกภาพมาใช้
+    watermarked = np.float32(image.copy())
+
+    # แบ่งภาพเป็นบล็อก 8x8 แล้วฝังข้อมูลในแต่ละบล็อก
+    idx = 0
+    for i in range(0, h, 8):
+        for j in range(0, w, 8):
+            if idx >= len(wm_flat): break
+            block = watermarked[i:i+8, j:j+8]
+            dct_block = cv2.dct(block)
+
+            # ฝังข้อมูลในค่าสัมประสิทธิ์ DCT (กลาง ๆ)
+            dct_block[4, 3] += alpha if wm_flat[idx] == 1 else -alpha
+            watermarked[i:i+8, j:j+8] = cv2.idct(dct_block)
+            idx += 1
+
+    return np.uint8(np.clip(watermarked, 0, 255))
 
 ##DCT Watermark Extraction
 
@@ -65,15 +92,24 @@ def extract_dct_midband(watermarked, wm_shape):
 
 
 ##Test the algorithm
+outd = "results_dct_pairwise"
+ensure_dir(outd)
 
 img = cv2.imread("test.jpg", cv2.IMREAD_GRAYSCALE)
 
-# สร้างลายน้ำ (หรือจะโหลดจากไฟล์ก็ได้)
+# สร้างลายน้ำ
 np.random.seed(42)
-watermark = np.random.randint(0, 2, (32, 32))
+rand_watermark = np.random.randint(0, 2, (32, 32))
+
+##ฝัง Logo
+wm = cv2.imread("KU_SubLogo.png", cv2.IMREAD_GRAYSCALE)
+wm = cv2.resize(wm, (32, 32))         # ปรับขนาดให้เท่ากับที่ต้องการ
+_, watermark = cv2.threshold(wm, 127, 1, cv2.THRESH_BINARY)  # แปลงเป็น 0/1
 
 # ฝังลายน้ำ
-wm_img = embed_dct_midband(img, watermark)
+# wm_img = embed_dct_midband(img, rand_watermark)
+wm_img = embed_dct(img, watermark)
+
 
 # ดึงกลับ
 extracted = extract_dct_midband(wm_img, watermark.shape)
@@ -84,7 +120,10 @@ ssim_val = ssim(img, wm_img)
 
 print(f"PSNR = {psnr_val:.2f} dB, SSIM = {ssim_val:.3f}")
 
-
+cv2.imwrite(os.path.join(outd, "Original.png"),img)
+cv2.imwrite(os.path.join(outd, "watermarkedLogo.png"),wm_img)
+cv2.imwrite(os.path.join(outd, "Extracted Watermark.jpg"),extracted)
+            
 plt.figure(figsize=(12,6))
 plt.subplot(1,3,1); plt.title("Original Image"); plt.imshow(img, cmap='gray'); plt.axis('off')
 plt.subplot(1,3,2); plt.title("Watermarked Image"); plt.imshow(wm_img, cmap='gray'); plt.axis('off')
