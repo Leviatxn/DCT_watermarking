@@ -39,29 +39,7 @@ def embed_dct_midband(img, watermark):
 
     return np.clip(watermarked, 0, 255).astype(np.uint8)
 
-# ==== ฟังก์ชันฝังลายน้ำแบบ DCT ====
-def embed_dct(image, watermark, alpha=10):
-    h, w = image.shape
-    wm_h, wm_w = watermark.shape
-    wm_flat = watermark.flatten()
 
-    # คัดลอกภาพมาใช้
-    watermarked = np.float32(image.copy())
-
-    # แบ่งภาพเป็นบล็อก 8x8 แล้วฝังข้อมูลในแต่ละบล็อก
-    idx = 0
-    for i in range(0, h, 8):
-        for j in range(0, w, 8):
-            if idx >= len(wm_flat): break
-            block = watermarked[i:i+8, j:j+8]
-            dct_block = cv2.dct(block)
-
-            # ฝังข้อมูลในค่าสัมประสิทธิ์ DCT (กลาง ๆ)
-            dct_block[4, 3] += alpha if wm_flat[idx] == 1 else -alpha
-            watermarked[i:i+8, j:j+8] = cv2.idct(dct_block)
-            idx += 1
-
-    return np.uint8(np.clip(watermarked, 0, 255))
 
 ##DCT Watermark Extraction
 
@@ -108,7 +86,7 @@ _, watermark = cv2.threshold(wm, 127, 1, cv2.THRESH_BINARY)  # แปลงเ�
 
 # ฝังลายน้ำ
 # wm_img = embed_dct_midband(img, rand_watermark)
-wm_img = embed_dct(img, watermark)
+wm_img = embed_dct_midband(img, watermark)
 
 
 # ดึงกลับ
