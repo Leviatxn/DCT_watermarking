@@ -2,7 +2,6 @@
 """
 DCT pairwise watermark embed/extract (blind) with simple ECC (3x repetition)
 Includes tests: JPEG compression, Gaussian noise, resize
-Author: ChatGPT (template for project)
 """
 
 import os
