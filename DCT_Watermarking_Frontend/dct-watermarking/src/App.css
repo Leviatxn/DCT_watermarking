@@ -1,0 +1,129 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(160deg, #e3f2fd, #f5f9ff);
+  font-family: "Prompt", sans-serif;
+}
+
+.card {
+  background: white;
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  width: 420px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #1565c0;
+}
+
+.mode-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.mode-toggle button {
+  border: none;
+  background: #e0e0e0;
+  padding: 0.6rem 1.2rem;
+  margin: 0 0.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-weight: 500;
+}
+
+.mode-toggle button.active {
+  background: #1565c0;
+  color: white;
+}
+
+.upload-section {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.upload-section label {
+  display: block;
+  margin-top: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.upload-section input[type="file"] {
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.button-section {
+  margin-top: 1.2rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1976d2, #42a5f5);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: transform 0.15s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+.result-section {
+  margin-top: 2rem;
+}
+
+.result-section h3 {
+  color: #1565c0;
+  margin-bottom: 0.5rem;
+}
+
+.preview {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+.btn-secondary {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+.btn-secondary:hover {
+  background-color: #aaa;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+.btn-success:hover {
+  background-color: #218838;
+}
