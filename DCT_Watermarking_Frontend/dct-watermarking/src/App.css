@@ -1,26 +1,132 @@
+/* 🔹 Navbar ด้านบน */
+.navbar {
+  
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 2rem; /* ลด padding ลงหน่อย */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed; /* อยู่บนสุดของหน้าจอ */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-radius: 0 0 16px 16px;
+}
+
+
+.navbar-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1565c0;
+}
+
+/* ปุ่มโหมดใน navbar ใช้ของเดิม */
+.navbar .mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+
+/* ===== กล่องหัวบนสุด ===== */
+.header-card {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 1.8rem 2.2rem;
+  text-align: center;
+  margin-bottom: 24px; /* เว้นระยะระหว่างกล่องบนกับล่าง */
+}
+
+.header-card .title {
+  font-size: 1.8rem;
+  color: #1565c0;
+  margin-bottom: 1rem;
+}
+
+.header-card .mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header-card .mode-toggle button {
+  border: none;
+  background: #e0e0e0;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.header-card .mode-toggle button.active {
+  background: #1565c0;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-card {
+    max-width: 90%;
+  }
+}
+
+
+
 .app-container {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* ✅ จาก center → แยกเป็นแนวตั้ง */
+  justify-content: flex-start; /* ✅ เริ่มจากด้านบน */
   align-items: center;
   background: linear-gradient(160deg, #e3f2fd, #f5f9ff);
   font-family: "Prompt", sans-serif;
+  padding-top: 100px; /* ✅ เพิ่มระยะเผื่อ navbar ด้านบน */
 }
 
-.card {
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  align-items: stretch;
+  justify-content: center;
+  
+}
+
+
+/* ✅ ให้ทั้งสองฝั่งสมดุล */
+.card,
+.result-section {
+  flex: 1;
+  max-width: 480px;
   background: white;
   padding: 2rem 2.5rem;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  width: 420px;
   text-align: center;
   transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column; /* ภายในจัดแนวตั้ง */
+  justify-content: space-between; /* ให้สมดุลด้านใน */
+  min-height: 550px; /* ✅ ความสูงพื้นฐานเท่ากัน */
 }
 
-.card:hover {
+.card:hover,
+.result-section:hover {
   transform: translateY(-4px);
 }
 
+/* ✅ ยกเลิก width เดิม */
+.card {
+  width: auto;
+}
+
+/* ===== ภายใน card ===== */
 .title {
   font-size: 1.6rem;
   margin-bottom: 1rem;
@@ -57,15 +163,19 @@
 .upload-section label {
   display: block;
   margin-top: 1rem;
-  color: #333;
-  font-weight: 500;
+  color: #000;
+  font-weight: 600;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+  
 }
+
 
 .upload-section input[type="file"] {
   width: 100%;
   margin-top: 0.4rem;
 }
 
+/* ===== ปุ่มหลัก ===== */
 .button-section {
   margin-top: 1.2rem;
 }
@@ -86,20 +196,27 @@
   transform: scale(1.05);
 }
 
-.result-section {
-  margin-top: 2rem;
-}
-
+/* ===== ผลลัพธ์ ===== */
 .result-section h3 {
   color: #1565c0;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
+
+.card h3 {
+  color: #1565c0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
 
 .preview {
   max-width: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
+
+/* ===== ปุ่มรองและปุ่มดาวน์โหลด ===== */
 .btn-secondary {
   background-color: #ccc;
   color: #333;
@@ -110,6 +227,7 @@
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
+
 .btn-secondary:hover {
   background-color: #aaa;
 }
@@ -124,6 +242,52 @@
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
+
 .btn-success:hover {
   background-color: #218838;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card,
+  .result-section {
+    max-width: 90%;
+    min-height: auto; /* ให้ยืดได้ในมือถือ */
+  }
+}
+
+
+/* ใช้จัดกล่องอัปโหลดให้อยู่เรียงแนวตั้ง */
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* ระยะห่างระหว่างแต่ละส่วน */
+}
+
+/* จัด label กับ input ให้อยู่ในบรรทัดเดียวกัน */
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* label ซ้าย, ปุ่มขวา */
+  gap: 10px;
+}
+
+/* ปรับให้ตัวอักษรหัวข้อเข้มขึ้น */
+.input-row label {
+  font-weight: 600;
+  color: #111;
+  
+}
+
+/* ปรับสไตล์ของปุ่ม Choose File */
+.input-row input[type="file"] {
+  border: none;
+  background: #f8f8f8;
+  padding: 6px;
+  border-radius: 6px;
 }

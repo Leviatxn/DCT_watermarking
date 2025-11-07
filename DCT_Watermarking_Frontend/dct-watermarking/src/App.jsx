@@ -36,9 +36,9 @@ export default function App() {
     setResult(URL.createObjectURL(res.data));
 
     Swal.fire({
-      title: "ฝังลายน้ำสำเร็จ!",
+      title: "🔒 EMBED SUCCESS! ✅ ",
       html: `<img src="${URL.createObjectURL(res.data)}" style="width:100%;border-radius:10px"/>`,
-      confirmButtonText: "ปิด",
+      confirmButtonText: "❌CLOSE❌",
       confirmButtonColor: "#3085d6",
     });
   };
@@ -65,31 +65,37 @@ export default function App() {
     link.click();
   };
 
-  return (
-    <div className="app-container">
+return (
+  <div className="app-container">
+    {/* 🔹 Navbar ด้านบน */}
+    <nav className="navbar">
+      <h1 className="navbar-title">🖼️ DCT Invisible Watermark Tool</h1>
+
+      <div className="mode-toggle">
+        <button
+          className={mode === "embed" ? "active" : ""}
+          onClick={() => setMode("embed")}
+        >
+         🔒 Embed Mode
+        </button>
+        <button
+          className={mode === "extract" ? "active" : ""}
+          onClick={() => setMode("extract")}
+        >
+          🔍 Extract Mode
+        </button>
+      </div>
+    </nav>
+
+    {/* 🔹 ส่วนล่าง: กล่องซ้าย-ขวา */}
+    <div className="content-wrapper">
+      {/* ซ้าย: อัปโหลด */}
       <div className="card">
-        <h1 className="title">🖼️ DCT Invisible Watermark Tool</h1>
-
-        <div className="mode-toggle">
-          <button
-            className={mode === "embed" ? "active" : ""}
-            onClick={() => setMode("embed")}
-          >
-            Embed Mode
-          </button>
-          <button
-            className={mode === "extract" ? "active" : ""}
-            onClick={() => setMode("extract")}
-          >
-            Extract Mode
-          </button>
-        </div>
-
         <div className="upload-section">
-          <label>📷 เลือกรูปภาพหลัก:</label>
+          <label>📷 Select Your Image 📷
+          
           <input type="file" accept="image/*" onChange={handleHostChange} />
-
-          {/* ✅ แสดงภาพหลักเมื่ออัปโหลด */}
+          </label>
           {previewHost && (
             <img
               src={previewHost}
@@ -101,14 +107,13 @@ export default function App() {
 
           {mode === "embed" && (
             <>
-              <label>💧 เลือกรูปลายน้ำ:</label>
+              <label>💧 Select Your Watermark 💧 
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleWatermarkChange}
               />
-
-              {/* ✅ แสดงภาพลายน้ำเมื่ออัปโหลด */}
+              </label>
               {previewWatermark && (
                 <img
                   src={previewWatermark}
@@ -130,18 +135,22 @@ export default function App() {
         <div className="button-section">
           {mode === "embed" ? (
             <button className="btn-primary" onClick={handleEmbed}>
-              🔒 ฝังลายน้ำ
+              🔒 DCT Embed 🔒
             </button>
           ) : (
             <button className="btn-primary" onClick={handleExtract}>
-              🔍 ตรวจสอบลายน้ำ
+              🔍 DCT Extract 🔍
             </button>
           )}
         </div>
       </div>
- {result && (
+
+      {/* ขวา: ผลลัพธ์ */}
+      {result && (
+        <div className="card">
+          <h3>🏆 Result 🏆</h3>
           <div className="result-section">
-            <h3>ผลลัพธ์:</h3>
+            
             <img
               src={result}
               alt="Result"
@@ -152,6 +161,7 @@ export default function App() {
                 marginTop: "10px",
               }}
             />
+            </div>
             <div
               style={{
                 display: "flex",
@@ -161,14 +171,18 @@ export default function App() {
               }}
             >
               <button className="btn-secondary" onClick={handleCloseResult}>
-                ❌ ปิดผลลัพธ์
+                ❌ CLOSE
               </button>
               <button className="btn-success" onClick={handleDownload}>
-                ⬇️ ดาวน์โหลด
+                ⬇️ DOWNLOAD
               </button>
             </div>
           </div>
-        )}
+        
+      )}
     </div>
-  );
+  </div>
+);
+
+
 }
