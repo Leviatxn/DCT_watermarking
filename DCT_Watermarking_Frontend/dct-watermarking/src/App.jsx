@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./App.css";
-
+import { FcPicture } from "react-icons/fc";
+import { RiPictureInPicture2Line } from "react-icons/ri";
+import { IoWaterSharp } from "react-icons/io5";
+import { IoIosLock } from "react-icons/io";
+import { FaSearch } from "react-icons/fa";
 
 export default function App() {
   // --- 1. เปลี่ยนชื่อ State เพื่อความชัดเจน ---
@@ -156,7 +160,8 @@ export default function App() {
   return (
     <div className="app-container">
       <div className="card">
-        <h1 className="title">🖼️ DCT Watermark Verification</h1>
+        <FcPicture size="50px"/> 
+        <h1 className="title">DCT Watermark Verification</h1>
 
         <div className="mode-toggle">
           <button
@@ -176,7 +181,7 @@ export default function App() {
         <div className="upload-section">
 
           <label>
-            📷 
+            <RiPictureInPicture2Line /> 
             {mode === "embed" ? " เลือกรูปภาพหลัก (Host):" : " เลือกรูปภาพที่จะตรวจสอบ:"}
           </label>
           <input type="file" accept="image/*" onChange={handleHostChange} />
@@ -192,7 +197,7 @@ export default function App() {
 
           
           <label>
-            💧 
+            <IoWaterSharp /> 
             {mode === "embed" ? " เลือกรูปลายน้ำ (Watermark):" : " เลือกลายน้ำต้นฉบับ (Original):"}
           </label>
           <input
@@ -220,11 +225,11 @@ export default function App() {
         <div className="button-section">
           {mode === "embed" ? (
             <button className="btn-primary" onClick={handleEmbed} disabled={!host || !watermark}>
-              🔒 ฝังลายน้ำ
+              <IoIosLock /> ฝังลายน้ำ
             </button>
           ) : (
             <button className="btn-primary" onClick={handleExtract} disabled={!host || !watermark}>
-              🔍 ตรวจสอบลายน้ำ
+              <FaSearch /> ตรวจสอบลายน้ำ
             </button>
           )}
         </div>
