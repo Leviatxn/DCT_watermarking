@@ -47,7 +47,7 @@ export default function App() {
   };
 
   const handleEmbed = async () => {
-    if (!host || !watermark) return alert("กรุณาเลือกรูปทั้งสองไฟล์ก่อน!");
+    if (!host || !watermark) return Swal.fire("⚠️ แจ้งเตือน", "กรุณาเลือกรูปทั้งสองไฟล์ก่อน!", "warning");
     
     const formData = new FormData();
     formData.append("image", host);
@@ -61,24 +61,16 @@ export default function App() {
       const imageUrl = URL.createObjectURL(res.data);
       setEmbedResult(imageUrl); // เก็บผลลัพธ์ที่เป็นภาพไว้ใน state
 
-      // เรียกใช้ 'window.Swal' แทน 'Swal'
-      if (window.Swal) {
-        window.Swal.fire({
-          title: "ฝังลายน้ำสำเร็จ!",
-          html: `<img src="${imageUrl}" style="width:100%;border-radius:10px" alt="watermarked output"/>`,
-          confirmButtonText: "ปิด",
-          confirmButtonColor: "#3085d6",
-        });
-      } else {
-        alert("ฝังลายน้ำสำเร็จ!"); // Fallback
-      }
+      Swal.fire({
+        title: "✅ ฝังลายน้ำสำเร็จ!",
+        html: `<img src="${imageUrl}" style="width:100%;border-radius:10px" alt="watermarked output"/>`,
+        showConfirmButton: true,
+        confirmButtonText: "ปิด",
+        confirmButtonColor: "#3085d6",
+      });
     } catch (err) {
       console.error(err);
-      if (window.Swal) {
-        window.Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถฝังลายน้ำได้", "error");
-      } else {
-        alert("เกิดข้อผิดพลาด! ไม่สามารถฝังลายน้ำได้");
-      }
+      Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถฝังลายน้ำได้", "error");
     }
   };
 
@@ -102,36 +94,28 @@ export default function App() {
       const resultColor = data.is_match ? "#4CAF50" : "#F44336";
       const resultText = data.is_match ? "ลายน้ำตรงกัน" : "ลายน้ำไม่ตรงกัน";
 
-      if (window.Swal) {
-        window.Swal.fire({
-          title: "ผลการตรวจสอบ!",
-          icon: data.is_match ? "success" : "error",
-          html: `
-            <div style="text-align: left; padding: 0 1em;">
-              <p style="font-size: 1.2em; color: ${resultColor}; font-weight: bold;">
-                สถานะ: ${resultText}
-              </p>
-              <hr>
-              <p><strong>Bit Error Rate (BER):</strong> ${data.ber}%</p>
-              <p><strong>จำนวนบิตที่ผิดพลาด:</strong> ${data.bit_errors} / ${data.total_bits} บิต</p>
-            </div>
-          `,
-          confirmButtonText: "ปิด",
-          confirmButtonColor: "#3085d6",
-        });
-      } else {
-        // Fallback
-        alert(`ผลการตรวจสอบ: ${resultText}\nBER: ${data.ber}% (${data.bit_errors}/${data.total_bits} บิต)`);
-      }
-
+      
+      Swal.fire({
+        title: "ผลการตรวจสอบ!",
+        icon: data.is_match ? "success" : "error",
+        html: `
+          <div style="text-align: left; padding: 0 1em;">
+            <p style="font-size: 1.2em; color: ${resultColor}; font-weight: bold;">
+              สถานะ: ${resultText}
+            </p>
+            <hr>
+            <p><strong>Bit Error Rate (BER):</strong> ${data.ber}%</p>
+            <p><strong>จำนวนบิตที่ผิดพลาด:</strong> ${data.bit_errors} / ${data.total_bits} บิต</p>
+          </div>
+        `,
+        confirmButtonText: "ปิด",
+        confirmButtonColor: "#3085d6",
+      });
     } catch (err) {
       console.error("Error during extraction:", err);
-      if (window.Swal) {
-        window.Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถตรวจสอบลายน้ำได้", "error");
-      } else {
-        alert("เกิดข้อผิดพลาด! ไม่สามารถตรวจสอบลายน้ำได้");
-      }
+      Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถตรวจสอบลายน้ำได้", "error");
     }
+           
   };
 
   // --- 3. แก้ไขฟังก์ชันที่เกี่ยวข้องกับผลลัพธ์ ---
@@ -149,14 +133,6 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* คุณสามารถเพิ่ม CSS ที่นี่ได้ถ้าจำเป็น
-        <style>
-        {`
-          .app-container { ... }
-          .card { ... }
-        `}
-        </style> 
-      */}
       <div className="card">
         <h1 className="title">🖼️ DCT Watermark Verification</h1>
 
@@ -176,8 +152,7 @@ export default function App() {
         </div>
 
         <div className="upload-section">
-          
-          {/* --- 4. เปลี่ยน Label ตามโหมด --- */}
+
           <label>
             📷 
             {mode === "embed" ? " เลือกรูปภาพหลัก (Host):" : " เลือกรูปภาพที่จะตรวจสอบ:"}
@@ -193,8 +168,6 @@ export default function App() {
             />
           )}
 
-          {/* --- 5. แสดงช่องอัปโหลดลายน้ำทั้งสองโหมด --- */}
-          {/* (เพราะ Extract ก็ต้องใช้ลายน้ำต้นฉบับ) */}
           
           <label>
             💧 
@@ -234,10 +207,6 @@ export default function App() {
           )}
         </div>
       </div>
-      
-      {/* --- 6. แก้ไขส่วนแสดงผลลัพธ์ --- */}
-      {/* ส่วนนี้จะแสดงเฉพาะผลลัพธ์ของ "Embed" (ที่เป็นภาพ) เท่านั้น */}
-      {/* ผลลัพธ์ของ "Extract" จะแสดงใน SweetAlert popup */}
       {mode === "embed" && embedResult && (
         <div className="result-section">
           <h3>ผลลัพธ์ (ภาพที่ฝังลายน้ำ):</h3>
