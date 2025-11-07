@@ -66,7 +66,12 @@ export default function App() {
         html: `<img src="${imageUrl}" style="width:100%;border-radius:10px" alt="watermarked output"/>`,
         showConfirmButton: true,
         confirmButtonText: "ปิด",
-        confirmButtonColor: "#3085d6",
+        confirmButtonColor: "#  3085d6",
+        customClass: {
+          popup: "swal2-animate",
+          title: "swal2-font",
+          htmlContainer: "swal2-font",
+        },
       });
     } catch (err) {
       console.error(err);
@@ -77,9 +82,19 @@ export default function App() {
   // --- 2. แก้ไข handleExtract ทั้งหมด ---
   const handleExtract = async () => {
 
-    if (!host || !watermark) {
-      return alert("กรุณาเลือกรูปภาพที่จะตรวจสอบ และรูปลายน้ำต้นฉบับ!");
-    }
+    if (!host || !watermark)
+      return Swal.fire({
+        title: "⚠️ แจ้งเตือน",
+        text: "กรุณาเลือกรูปภาพและลายน้ำต้นฉบับ!",
+        icon: "warning",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#3085d6",
+        customClass: {
+          popup: "swal2-animate",
+          title: "swal2-font",
+          htmlContainer: "swal2-font",
+        },
+      });
 
     const formData = new FormData();
     formData.append("image", host);
@@ -96,11 +111,11 @@ export default function App() {
 
       
       Swal.fire({
-        title: "ผลการตรวจสอบ!",
+        title: "🔍 ผลการตรวจสอบ",
         icon: data.is_match ? "success" : "error",
         html: `
-          <div style="text-align: left; padding: 0 1em;">
-            <p style="font-size: 1.2em; color: ${resultColor}; font-weight: bold;">
+          <div style="text-align:left;line-height:1.6;padding:30px;">
+            <p className:"swal2-font" style="font-size:1.2em;font-weight:bold;color:${resultColor};">
               สถานะ: ${resultText}
             </p>
             <hr>
@@ -110,6 +125,12 @@ export default function App() {
         `,
         confirmButtonText: "ปิด",
         confirmButtonColor: "#3085d6",
+        background: "#fefefe",
+        customClass: {
+          popup: "swal2-animate",
+          title: "swal2-font",
+          htmlContainer: "swal2-font",
+        },
       });
     } catch (err) {
       console.error("Error during extraction:", err);
@@ -121,6 +142,7 @@ export default function App() {
   // --- 3. แก้ไขฟังก์ชันที่เกี่ยวข้องกับผลลัพธ์ ---
   const handleCloseResult = () => {
     setEmbedResult(null); // ปิดผลลัพธ์ของ embed
+    clearInputs();
   };
 
   const handleDownload = () => {
@@ -207,36 +229,28 @@ export default function App() {
           )}
         </div>
       </div>
-      {mode === "embed" && embedResult && (
-        <div className="result-section">
-          <h3>ผลลัพธ์ (ภาพที่ฝังลายน้ำ):</h3>
-          <img
-            src={embedResult}
-            alt="Result"
-            className="preview"
-            style={{
-              maxWidth: "100%",
-              borderRadius: "10px",
-              marginTop: "10px",
-            }}
-          />
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "center",
-              marginTop: "10px",
-            }}
-          >
-            <button className="btn-secondary" onClick={handleCloseResult}>
-              ❌ ปิดผลลัพธ์
-            </button>
-            <button className="btn-success" onClick={handleDownload}>
-              ⬇️ ดาวน์โหลด
-            </button>
+        {mode === "embed" && embedResult && (
+          <div className="card" style={{marginLeft:'20px'}}>
+          <div className="result-section">
+            <h3>ผลลัพธ์ (ภาพที่ฝังลายน้ำ):</h3>
+            <img
+              src={embedResult}
+              alt="Result"
+              className="preview"
+              style={{ maxWidth: "100%", borderRadius: "10px", marginTop: "10px" }}
+            />
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "10px" }}>
+              <button className="btn-secondary" onClick={handleCloseResult}>
+                ❌ ปิดผลลัพธ์
+              </button>
+              <button className="btn-success" onClick={handleDownload}>
+                ⬇️ ดาวน์โหลด
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+          </div>
+        )}
+
     </div>
   );
 }

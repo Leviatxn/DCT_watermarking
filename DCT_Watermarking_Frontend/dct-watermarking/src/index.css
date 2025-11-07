@@ -29,6 +29,10 @@ body {
   background-color: #f0f4f8;
 }
 
+p {
+  font-family: "Noto Sans", sans-serif;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
